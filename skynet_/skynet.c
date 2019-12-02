@@ -104,7 +104,7 @@ int main()
         printf("malloc fail\n");
         exit(1);
     }
-    if( (motor_args = malloc(sizeof(struct Motor_Argument)) == NULL)) {
+    if( (motor_args = malloc( sizeof(struct Motor_Argument) )) == NULL) {
         printf("malloc fail\n");
         exit(1);
     }

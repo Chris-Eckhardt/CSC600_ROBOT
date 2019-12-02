@@ -2,9 +2,6 @@
 #include <stdlib.h>
 #include "../util/arguments.h"
 
-#define stopped 0;
-#define forward 0 
-
 
 struct Motor_Argument * params;
 
@@ -129,9 +126,8 @@ void motor_init ()
         exit(1);
     }
 
-    /*********** init complete ***********/
-    return 0;
-}
+    
+} /*********** init complete ***********/
 
 
 
