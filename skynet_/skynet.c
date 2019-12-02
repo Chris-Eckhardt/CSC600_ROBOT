@@ -110,9 +110,12 @@ int main()
     }
     
     /*************************** ASSIGN ARGUMENT VALUES **********************/
-    args[0].pin_1 = PIN_IR_1;
-    args[0].pin_2 = PIN_IR_2;
-    args[0].ptr = &IR_1;
+    motor_args->pin_M_1A = MOTOR_1_A;
+    motor_args->pin_M_1B = MOTOR_1_B;
+    motor_args->pin_M_1C = MOTOR_1_C;
+    motor_args->pin_M_1D = MOTOR_1_D;
+    motor_args->pin_M_1E = MOTOR_1_E;
+    motor_args->pin_M_1F = MOTOR_1_F;
     
     /*************************** LAUNCH THREADS **********************/
     /*
