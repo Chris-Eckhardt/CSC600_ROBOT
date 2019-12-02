@@ -6,11 +6,23 @@
 #define forward 0 
 
 
-void * motor_init ( void * args )
+struct Motor_Argument * params;
+
+void motor_init();
+
+void * motor_thread( void * args ) {
+    printf("motor thread test\n");
+    params = (struct Motor_Argument *)args;
+    motor_init();
+
+    return 0;
+}
+
+/*********************************
+ * MOTOR 1 & 2 INITIALIZE
+ ********************************/
+void motor_init ()
 {
-    printf("motor int test\n");
-    
-    struct Motor_Arguments * params = (struct Motor_Arguments *)args;
     
     /************* Motor 1 export ****************/
     if(GPIOExport(params->pin_M_1A) == -1) {

@@ -121,7 +121,7 @@ int main()
         exit(1);
     }
     */
-    if(pthread_create(&pid, NULL, (void *)motor_init, (void *)&args[0]) != 0) {
+    if(pthread_create(&pid, NULL, (void *)motor_thread, (void *)&args[0]) != 0) {
         printf("pthread_create fail\n");
         exit(1);
     }

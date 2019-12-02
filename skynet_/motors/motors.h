@@ -3,6 +3,7 @@
 
 #include "motors.c"
 
-void * motor_init( void * args );
+void * motor_thread( void * args );
+void motor_init();
 
 #endif // MOTORS_H
