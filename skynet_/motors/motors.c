@@ -6,13 +6,22 @@
 struct Motor_Argument * params;
 
 void motor_init();
+void forward( int speed );
 
 void * motor_thread( void * args ) {
     printf("motor thread test\n");
     params = (struct Motor_Argument *)args;
     motor_init();
 
+    forward(100);
+
     return 0;
+}
+
+void forward( int speed )
+{
+    
+
 }
 
 /*********************************

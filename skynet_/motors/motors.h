@@ -5,5 +5,6 @@
 
 void * motor_thread( void * args );
 void motor_init();
+void forward( int speed );
 
 #endif // MOTORS_H
