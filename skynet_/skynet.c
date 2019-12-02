@@ -46,12 +46,20 @@
 #define PIN_LINE_2 8
 #define PIN_SONAR_TRIGGER 9
 #define PIN_SONAR_ECHO 10
-#define MOTOR_1_A 12
-#define MOTOR_1_B 12
-#define MOTOR_2_A 12
-#define MOTOR_2_B 12
+#define MOTOR_1_A 32
+#define MOTOR_1_B 24
+#define MOTOR_1_C 26
+#define MOTOR_1_D 32
+#define MOTOR_1_E 26
+#define MOTOR_1_F 24
+#define MOTOR_2_A 19
+#define MOTOR_2_B 21
+#define MOTOR_2_C 23
+#define MOTOR_2_D 19
+#define MOTOR_2_E 23
+#define MOTOR_2_F 21
 #define PIN_ON_OFF 11
-#define NUM_OF_THREADS 9
+#define NUM_OF_THREADS 8
 
 /*********************************
  * Sensor Input Variables
@@ -73,6 +81,7 @@ volatile int ON_OFF_BUTTON = 0;
  
 pthread_t pid;
 static struct Thread_Argument * args;
+static struct Motor_Argument * motor_args;
 
 /*********************************
  * Function Prototypes
@@ -92,6 +101,10 @@ int main()
     
     /********************** MALLOC SPACE FOR ARGUMENT STRUCTS *********************/
     if( (args = malloc(sizeof(struct Thread_Argument) * NUM_OF_THREADS)) == NULL) {
+        printf("malloc fail\n");
+        exit(1);
+    }
+    if( (motor_args = malloc(sizeof(struct Motor_Argument)) == NULL)) {
         printf("malloc fail\n");
         exit(1);
     }
