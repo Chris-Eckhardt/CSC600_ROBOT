@@ -86,8 +86,6 @@ int line_2_pin[] = {PIN_LINE_2};
 int line_3_pin[] = {PIN_LINE_3};
 int line_4_pin[] = {PIN_LINE_4};
 
-
-
 /*********************************
  * ADMIN: Uninitialized Variables
  ********************************/
@@ -188,7 +186,7 @@ void exit_handler() {
     delay(100);
     for(int i = 0; i < NUM_OF_THREADS; i++) {
         pthread_join(args[i].pid, NULL);
-        printf("thread %d of 8 joined\n", args[i].thread_id);
+        printf("thread %d of %d joined\n", args[i].thread_id, NUM_OF_THREADS);
     }
     free(args);
     args = NULL;
