@@ -62,7 +62,7 @@ volatile int LINE_1 = 0;
 volatile int LINE_2 = 0;
 volatile int LINE_3 = 0;
 volatile int LINE_4 = 0;
-volatile int SONAR = 0;
+volatile double SONAR = 0;
 volatile int ON_OFF_BUTTON = 0;
 
 /*********************************
@@ -165,7 +165,8 @@ void set_thread_args()
     args[i].thread_id = i+1;
     args[i].pins_1 = sonar_pins;
     args[i].pins_2 = NULL;
-    args[i].ptr = &SONAR;
+    args[i].ptr = NULL;
+    args[i].sonar_ptr = &SONAR;
     args[i].state = &STATE;
     i++;
 

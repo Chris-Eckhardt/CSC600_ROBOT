@@ -50,7 +50,6 @@ void forward( int speed )
 void motor_init ()
 {
     printf("motor init\n");
-    printf(" %d %d %d \n", (params->pins_1)[0], (params->pins_1)[1], (params->pins_1)[2]);
 }
 
 
