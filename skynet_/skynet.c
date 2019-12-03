@@ -8,20 +8,14 @@
 *
 *       COMMAND & CONTROL MODULE
 *
-*   Disclaimer : 
-*   If product becomes sentient, 
-*   please consult user manual.
-*
 **************************************/
 /*********************************
  * 
+ * DESCRIPTION: description goes here
  * 
+ * BUILD: gcc -pthread -o skynet skynet.c
  * 
- * 
- * 
- * 
- * 
- * 
+ * EXECUTE: ./skynet
  * 
  ********************************/
 
@@ -85,6 +79,7 @@ int line_1_pin[] = {PIN_LINE_1};
 int line_2_pin[] = {PIN_LINE_2};
 int line_3_pin[] = {PIN_LINE_3};
 int line_4_pin[] = {PIN_LINE_4};
+int pin_on_off = (PIN_ON_OFF);
 
 /*********************************
  * ADMIN: Uninitialized Variables
