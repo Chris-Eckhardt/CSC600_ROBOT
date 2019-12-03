@@ -49,15 +49,9 @@
 #define MOTOR_1_A 32
 #define MOTOR_1_B 24
 #define MOTOR_1_C 26
-#define MOTOR_1_D 32
-#define MOTOR_1_E 26
-#define MOTOR_1_F 24
 #define MOTOR_2_A 19
 #define MOTOR_2_B 21
 #define MOTOR_2_C 23
-#define MOTOR_2_D 19
-#define MOTOR_2_E 23
-#define MOTOR_2_F 21
 #define PIN_ON_OFF 11
 #define NUM_OF_THREADS 8
 
@@ -76,18 +70,29 @@ volatile int SONAR = 0;
 volatile int ON_OFF_BUTTON = 0;
 
 /*********************************
+ * PIN ARRAYS
+ ********************************/
+
+int motor_1_pins[] = {MOTOR_1_A, MOTOR_1_B, MOTOR_1_C};
+int motor_2_pins[] = {MOTOR_2_A, MOTOR_2_B, MOTOR_2_C};
+int sonar_pins[] = {PIN_SONAR_TRIGGER, PIN_SONAR_ECHO};
+
+/*********************************
  * Uninitialized Variables
  ********************************/
  
-pthread_t pid;
-static struct Thread_Argument * args;
-static struct Motor_Argument * motor_args;
+int STATE;
+pthread_t motor_pid;
+pthread_t sonar_pid;
+struct Thread_Argument * args;
 
 /*********************************
  * Function Prototypes
  ********************************/
  
 void exit_handler();
+void init();
+void set_thread_args();
 void run();
 
 /*********************************
@@ -96,52 +101,58 @@ void run();
  
 int main()
 {
-    /*************************** CNTL_C SIGNAL HANDLER **********************/
     signal(SIGINT, exit_handler);
-    
-    /********************** MALLOC SPACE FOR ARGUMENT STRUCTS *********************/
-    if( (args = malloc(sizeof(struct Thread_Argument) * NUM_OF_THREADS)) == NULL) {
-        printf("malloc fail\n");
-        exit(1);
-    }
-    if( (motor_args = malloc( sizeof(struct Motor_Argument) )) == NULL) {
-        printf("malloc fail\n");
-        exit(1);
-    }
-    
-    /*************************** ASSIGN ARGUMENT VALUES **********************/
-    motor_args->pin_M_1A = MOTOR_1_A;
-    motor_args->pin_M_1B = MOTOR_1_B;
-    motor_args->pin_M_1C = MOTOR_1_C;
-    motor_args->pin_M_1D = MOTOR_1_D;
-    motor_args->pin_M_1E = MOTOR_1_E;
-    motor_args->pin_M_1F = MOTOR_1_F;
-    
-    /*************************** LAUNCH THREADS **********************/
-    /*
-    if(pthread_create(&pid, NULL, (void *)light_emitting_sensor, (void *)args[0]) != 0) {
-        printf("pthread_create fail\n");
-        exit(1);
-    }
-    */
-    if(pthread_create(&pid, NULL, (void *)motor_thread, (void *)&args[0]) != 0) {
-        printf("pthread_create fail\n");
-        exit(1);
-    }
-    
-    /************* RUN ***************/
+    init();
     run();
-    /*********************************/
-    
     return 0;
 }
 
 void run()
 {
-    while(1) {
-        //printf( IR_1 ? "CLEAR\n" : "OBSTACLE\n" );
-        delay(30);
+    while(1) 
+    {
+        // 1. read sensor data
+
+        // 2. make decision
+
+        // 3. tell motors what to do
+
+        delay(100);
     }
+}
+
+void init()
+{
+    if( (args = malloc( sizeof(struct Thread_Argument)* NUM_OF_THREADS) ) == NULL )
+    {
+        printf("\n***** malloc fail @ init *****\n");
+        exit(1);
+    }
+
+    set_thread_args();
+
+    pthread_create( &motor_pid, NULL, (void *) motor_thread, (void *) &args[0]);
+    pthread_create( &sonar_pid, NULL, (void *) sonar_thread, (void *) &args[1]);
+    
+}
+
+void set_thread_args()
+{
+    int i = 0;
+    printf("setting thread args\n");
+    args[i].thread_id = i+1;
+    args[i].pins_1 = motor_1_pins;
+    args[i].pins_2 = motor_2_pins;
+    args[i].ptr = NULL;
+    args[i].state = &STATE;
+    i++;
+    args[i].thread_id = i+1;
+    args[i].pins_1 = sonar_pins;
+    args[i].pins_2 = NULL;
+    args[i].ptr = &SONAR;
+    args[i].state = &STATE;
+    i++;
+
 }
 
 /*********************************
@@ -149,9 +160,15 @@ void run()
  ********************************/
  
 void exit_handler() {
-    pthread_cancel(pid);
+    printf("\n*****    exiting...     *****\n");
+    STATE = -1;
+    delay(100);
+    for(int i = 0; i < NUM_OF_THREADS; i++) {
+        pthread_join(args[i].pid, NULL);
+        printf("thread %d of 8 joined\n", args[i].thread_id);
+    }
     free(args);
     args = NULL;
-    printf("\nexiting...\n");
+    printf("***** shutdown complete *****\n");
     exit(0);
 }

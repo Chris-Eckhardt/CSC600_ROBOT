@@ -1,6 +1,6 @@
 #include "sensor.c"
 
-void * light_emitting_sensor ( void * args );
-void * sonar_sensor ( void * args );
+void * light_emitting_thread ( void * args );
+void * sonar_thread ( void * args );
 
 
