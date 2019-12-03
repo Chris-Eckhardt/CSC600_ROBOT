@@ -14,4 +14,4 @@ struct Thread_Argument
     int * state;
 };
 
-#endif
+#endif /* ARGUMENTS */
