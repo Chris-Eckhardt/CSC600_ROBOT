@@ -70,10 +70,8 @@ void * sonar_thread ( void * args )
 
     while(1)
     {
-
         temp = getSonar();
         *sonar_args->sonar_ptr = temp;
-
 
         /* EXIT FLAG CHECK */
         if((*sonar_args->state) == -1)
