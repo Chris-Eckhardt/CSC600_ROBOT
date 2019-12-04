@@ -49,7 +49,7 @@
 #define MOTOR_2_B 21
 #define MOTOR_2_C 23
 #define PIN_ON_OFF 11
-#define NUM_OF_THREADS 8
+#define NUM_OF_THREADS 9
 
 /*********************************
  * DATA: Sensor Input Variables
@@ -88,6 +88,14 @@ int pin_on_off = (PIN_ON_OFF);
 int STATE;
 pthread_t motor_pid;
 pthread_t sonar_pid;
+pthread_t ir_1_pid;
+pthread_t ir_2_pid;
+pthread_t ir_3_pid;
+pthread_t line_1_pid;
+pthread_t line_2_pid;
+pthread_t line_3_pid;
+pthread_t line_4_pid;
+
 struct Thread_Argument * args;
 
 /*********************************
@@ -145,7 +153,13 @@ void init()
 
     pthread_create( &motor_pid, NULL, (void *) motor_thread, (void *) &args[0]);
     pthread_create( &sonar_pid, NULL, (void *) sonar_thread, (void *) &args[1]);
-    
+    pthread_create( &ir_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[2]);
+    pthread_create( &ir_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[3]);
+    pthread_create( &ir_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[4]);
+    pthread_create( &line_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[5]);
+    pthread_create( &line_2_pid, NULL, (void *) light_emitting_thread, (void *) &args[6]);
+    pthread_create( &line_3_pid, NULL, (void *) light_emitting_thread, (void *) &args[7]);
+    pthread_create( &line_4_pid, NULL, (void *) light_emitting_thread, (void *) &args[8]);
 }
 
 /*********************************
@@ -169,7 +183,54 @@ void set_thread_args()
     args[i].sonar_ptr = &SONAR;
     args[i].state = &STATE;
     i++;
-
+    args[i].thread_id = i+1;
+    args[i].pins_1 = ir_1_pin;
+    args[i].pins_2 = NULL;
+    args[i].ptr = &IR_1;
+    args[i].sonar_ptr = NULL;
+    args[i].state = &STATE;
+    i++;
+    args[i].thread_id = i+1;
+    args[i].pins_1 = ir_2_pin;
+    args[i].pins_2 = NULL;
+    args[i].ptr = &IR_2;
+    args[i].sonar_ptr = NULL;
+    args[i].state = &STATE;
+    i++;
+    args[i].thread_id = i+1;
+    args[i].pins_1 = ir_3_pin;
+    args[i].pins_2 = NULL;
+    args[i].ptr = &IR_3;
+    args[i].sonar_ptr = NULL;
+    args[i].state = &STATE;
+    i++;
+    args[i].thread_id = i+1;
+    args[i].pins_1 = line_1_pin;
+    args[i].pins_2 = NULL;
+    args[i].ptr = &LINE_1;
+    args[i].sonar_ptr = NULL;
+    args[i].state = &STATE;
+    i++;
+    args[i].thread_id = i+1;
+    args[i].pins_1 = line_2_pin;
+    args[i].pins_2 = NULL;
+    args[i].ptr = &LINE_2;
+    args[i].sonar_ptr = NULL;
+    args[i].state = &STATE;
+    i++;
+    args[i].thread_id = i+1;
+    args[i].pins_1 = line_3_pin;
+    args[i].pins_2 = NULL;
+    args[i].ptr = &LINE_3;
+    args[i].sonar_ptr = NULL;
+    args[i].state = &STATE;
+    i++;
+    args[i].thread_id = i+1;
+    args[i].pins_1 = line_4_pin;
+    args[i].pins_2 = NULL;
+    args[i].ptr = &LINE_4;
+    args[i].sonar_ptr = NULL;
+    args[i].state = &STATE;
 }
 
 /*********************************
