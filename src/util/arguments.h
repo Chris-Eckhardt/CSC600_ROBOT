@@ -5,7 +5,7 @@
 
 struct Thread_Argument
 { 
-    pthread_t pid;
+    pthread_t * pid;
     int thread_id;
     int * shutdown_flag;
     int * pins_1;

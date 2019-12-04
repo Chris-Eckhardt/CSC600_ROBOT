@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../util/arguments.h"
-#include "../util/etc.h"
 
 
 struct Thread_Argument * params;
@@ -11,7 +10,6 @@ void forward( int speed );
 void motor_run();
 
 void * motor_thread( void * args ) {
-    printf("motor thread test\n");
     params = (struct Thread_Argument *) args;
     motor_init();
     motor_run();
@@ -37,7 +35,7 @@ void motor_run()
             printf("!!!! motor_shutdown !!!!\n");
             break;
         }
-        delay(30);
+
     }
 }
 
@@ -49,7 +47,7 @@ void forward( int speed )
 
 void motor_init ()
 {
-    printf("motor init\n");
+
 }
 
 

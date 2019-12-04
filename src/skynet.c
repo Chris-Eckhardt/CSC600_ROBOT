@@ -13,7 +13,7 @@
  * 
  * DESCRIPTION: description goes here
  * 
- * BUILD: gcc -pthread -o skynet skynet.c
+ * BUILD: gcc -pthread -lwiringPi -o skynet skynet.c
  * 
  * EXECUTE: ./skynet
  * 
@@ -24,9 +24,9 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <signal.h>
+#include <wiringPi.h>
 #include "./util/arguments.h"
 #include "./sensors/sensor.h"
-#include "./util/etc.h"
 #include "./motors/motors.h"
 
 /*********************************
@@ -128,8 +128,8 @@ void run()
     while(1) 
     {
 
-
-        delay(100);
+        printf("running...\n");
+        delay(30);
     }
 }
 
@@ -139,6 +139,12 @@ void run()
 
 void init()
 {
+    
+    if(wiringPiSetup() == -1) {
+        printf("setup wiringPi failed!");
+        exit(1);
+    }
+    
     if( (args = malloc( sizeof(struct Thread_Argument)* NUM_OF_THREADS) ) == NULL )
     {
         printf("\n***** malloc fail @ init *****\n");
@@ -165,13 +171,14 @@ void init()
 void set_thread_args()
 {
     int i = 0;
-    printf("setting thread args\n");
+    args[i].pid = &motor_pid;
     args[i].thread_id = i+1;
     args[i].pins_1 = motor_1_pins;
     args[i].pins_2 = motor_2_pins;
     args[i].ptr = NULL;
     args[i].state = &STATE;
     i++;
+    args[i].pid = &sonar_pid;
     args[i].thread_id = i+1;
     args[i].pins_1 = sonar_pins;
     args[i].pins_2 = NULL;
@@ -179,6 +186,7 @@ void set_thread_args()
     args[i].sonar_ptr = &SONAR;
     args[i].state = &STATE;
     i++;
+    args[i].pid = &ir_1_pid;
     args[i].thread_id = i+1;
     args[i].pins_1 = ir_1_pin;
     args[i].pins_2 = NULL;
@@ -186,6 +194,7 @@ void set_thread_args()
     args[i].sonar_ptr = NULL;
     args[i].state = &STATE;
     i++;
+    args[i].pid = &ir_2_pid;
     args[i].thread_id = i+1;
     args[i].pins_1 = ir_2_pin;
     args[i].pins_2 = NULL;
@@ -193,6 +202,7 @@ void set_thread_args()
     args[i].sonar_ptr = NULL;
     args[i].state = &STATE;
     i++;
+    args[i].pid = &ir_3_pid;
     args[i].thread_id = i+1;
     args[i].pins_1 = ir_3_pin;
     args[i].pins_2 = NULL;
@@ -200,6 +210,7 @@ void set_thread_args()
     args[i].sonar_ptr = NULL;
     args[i].state = &STATE;
     i++;
+    args[i].pid = &line_1_pid;
     args[i].thread_id = i+1;
     args[i].pins_1 = line_1_pin;
     args[i].pins_2 = NULL;
@@ -207,6 +218,7 @@ void set_thread_args()
     args[i].sonar_ptr = NULL;
     args[i].state = &STATE;
     i++;
+    args[i].pid = &line_2_pid;
     args[i].thread_id = i+1;
     args[i].pins_1 = line_2_pin;
     args[i].pins_2 = NULL;
@@ -214,6 +226,7 @@ void set_thread_args()
     args[i].sonar_ptr = NULL;
     args[i].state = &STATE;
     i++;
+    args[i].pid = &line_3_pid;
     args[i].thread_id = i+1;
     args[i].pins_1 = line_3_pin;
     args[i].pins_2 = NULL;
@@ -221,6 +234,7 @@ void set_thread_args()
     args[i].sonar_ptr = NULL;
     args[i].state = &STATE;
     i++;
+    args[i].pid = &line_4_pid;
     args[i].thread_id = i+1;
     args[i].pins_1 = line_4_pin;
     args[i].pins_2 = NULL;
@@ -236,9 +250,8 @@ void set_thread_args()
 void exit_handler() {
     printf("\n*****    exiting...     *****\n");
     STATE = -1;
-    delay(100);
     for(int i = 0; i < NUM_OF_THREADS; i++) {
-        pthread_join(args[i].pid, NULL);
+        pthread_join(*args[i].pid, NULL);
         printf("thread %d of %d joined\n", args[i].thread_id, NUM_OF_THREADS);
     }
     free(args);
