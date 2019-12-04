@@ -62,7 +62,7 @@ volatile int LINE_1 = 0;
 volatile int LINE_2 = 0;
 volatile int LINE_3 = 0;
 volatile int LINE_4 = 0;
-volatile double SONAR = 0;
+volatile float SONAR = 0;
 volatile int ON_OFF_BUTTON = 0;
 
 /*********************************
@@ -85,7 +85,6 @@ int pin_on_off = (PIN_ON_OFF);
  * ADMIN: Uninitialized Variables
  ********************************/
  
-int STATE;
 pthread_t motor_pid;
 pthread_t sonar_pid;
 pthread_t ir_1_pid;
@@ -176,7 +175,6 @@ void set_thread_args()
     args[i].pins_1 = motor_1_pins;
     args[i].pins_2 = motor_2_pins;
     args[i].ptr = NULL;
-    args[i].state = &STATE;
     i++;
     args[i].pid = &sonar_pid;
     args[i].thread_id = i+1;
@@ -184,7 +182,6 @@ void set_thread_args()
     args[i].pins_2 = NULL;
     args[i].ptr = NULL;
     args[i].sonar_ptr = &SONAR;
-    args[i].state = &STATE;
     i++;
     args[i].pid = &ir_1_pid;
     args[i].thread_id = i+1;
@@ -192,7 +189,6 @@ void set_thread_args()
     args[i].pins_2 = NULL;
     args[i].ptr = &IR_1;
     args[i].sonar_ptr = NULL;
-    args[i].state = &STATE;
     i++;
     args[i].pid = &ir_2_pid;
     args[i].thread_id = i+1;
@@ -200,7 +196,6 @@ void set_thread_args()
     args[i].pins_2 = NULL;
     args[i].ptr = &IR_2;
     args[i].sonar_ptr = NULL;
-    args[i].state = &STATE;
     i++;
     args[i].pid = &ir_3_pid;
     args[i].thread_id = i+1;
@@ -208,7 +203,6 @@ void set_thread_args()
     args[i].pins_2 = NULL;
     args[i].ptr = &IR_3;
     args[i].sonar_ptr = NULL;
-    args[i].state = &STATE;
     i++;
     args[i].pid = &line_1_pid;
     args[i].thread_id = i+1;
@@ -216,7 +210,6 @@ void set_thread_args()
     args[i].pins_2 = NULL;
     args[i].ptr = &LINE_1;
     args[i].sonar_ptr = NULL;
-    args[i].state = &STATE;
     i++;
     args[i].pid = &line_2_pid;
     args[i].thread_id = i+1;
@@ -224,7 +217,6 @@ void set_thread_args()
     args[i].pins_2 = NULL;
     args[i].ptr = &LINE_2;
     args[i].sonar_ptr = NULL;
-    args[i].state = &STATE;
     i++;
     args[i].pid = &line_3_pid;
     args[i].thread_id = i+1;
@@ -232,7 +224,6 @@ void set_thread_args()
     args[i].pins_2 = NULL;
     args[i].ptr = &LINE_3;
     args[i].sonar_ptr = NULL;
-    args[i].state = &STATE;
     i++;
     args[i].pid = &line_4_pid;
     args[i].thread_id = i+1;
@@ -240,7 +231,6 @@ void set_thread_args()
     args[i].pins_2 = NULL;
     args[i].ptr = &LINE_4;
     args[i].sonar_ptr = NULL;
-    args[i].state = &STATE;
 }
 
 /*********************************
@@ -249,10 +239,9 @@ void set_thread_args()
  
 void exit_handler() {
     printf("\n*****    exiting...     *****\n");
-    STATE = -1;
     for(int i = 0; i < NUM_OF_THREADS; i++) {
-        pthread_join(*args[i].pid, NULL);
-        printf("thread %d of %d joined\n", args[i].thread_id, NUM_OF_THREADS);
+        pthread_cancel(*args[i].pid);
+        printf("thread %d of %d cancelled\n", args[i].thread_id, NUM_OF_THREADS);
     }
     free(args);
     args = NULL;

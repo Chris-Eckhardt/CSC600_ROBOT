@@ -25,16 +25,8 @@ void motor_run()
 
 
 
-
         // 2. set motors
 
-
-        /* EXIT FLAG CHECK */
-        if((*params->state) == -1)
-        {
-            printf("!!!! motor_shutdown !!!!\n");
-            break;
-        }
 
     }
 }

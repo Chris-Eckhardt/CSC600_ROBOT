@@ -8,6 +8,8 @@ struct Thread_Argument * sonar_args;
 int timeOut;
 double temp;
 
+float getDistance();
+
 void * light_emitting_thread ( void * args )
 {
     int temp;
@@ -20,13 +22,6 @@ void * light_emitting_thread ( void * args )
         temp = digitalRead(les_args->pins_1[0]);
         *les_args->ptr = temp;
 
-        /* EXIT FLAG CHECK */
-        if((*les_args->state) == -1)
-        {
-            
-            printf("!!!! les_shutdown !!!!\n");
-            break;
-        }
     }
     
 
@@ -35,22 +30,16 @@ void * light_emitting_thread ( void * args )
 
 void * sonar_thread ( void * args )
 {
-    double temp;
+    float temp;
     sonar_args = (struct Thread_Argument *) args;
     
-    
+    pinMode(sonar_args->pins_1[0], OUTPUT);
+    pinMode(sonar_args->pins_1[1], INPUT);
 
     while(1)
     {
-
-        
-        /* EXIT FLAG CHECK */
-        if((*sonar_args->state) == -1)
-        {
-
-            printf("!!!! sonar_shutdown !!!!\n");
-            break;
-        }
+        temp = getDistance();
+        *sonar_args->sonar_ptr = temp;
     
     }
     return 0;

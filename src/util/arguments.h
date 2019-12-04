@@ -11,8 +11,7 @@ struct Thread_Argument
     int * pins_1;
     int * pins_2;
     volatile int * ptr;
-    volatile double * sonar_ptr;
-    int * state;
+    volatile float * sonar_ptr;
 };
 
 #endif /* ARGUMENTS */
