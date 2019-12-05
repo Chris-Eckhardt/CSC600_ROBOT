@@ -42,12 +42,12 @@
 #define PIN_LINE_4 8
 #define PIN_SONAR_TRIGGER 9
 #define PIN_SONAR_ECHO 10
-#define MOTOR_1_A 32
-#define MOTOR_1_B 24
-#define MOTOR_1_C 26
-#define MOTOR_2_A 19
-#define MOTOR_2_B 21
-#define MOTOR_2_C 23
+#define MOTOR_1_A 13
+#define MOTOR_1_B 15
+#define MOTOR_1_C 11
+#define MOTOR_2_A 18
+#define MOTOR_2_B 16
+#define MOTOR_2_C 22
 #define PIN_ON_OFF 11
 #define NUM_OF_THREADS 9
 
@@ -127,7 +127,7 @@ void run()
     while(1) 
     {
 
-        printf("running...\n");
+        //printf("running...\n");
         delay(30);
     }
 }

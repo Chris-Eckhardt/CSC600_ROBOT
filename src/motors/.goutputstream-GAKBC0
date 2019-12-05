@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <wiringPi.h>
+#include <softPwm.h>
 #include "../util/arguments.h"
 
 
@@ -81,7 +82,6 @@ void forward( int speed )
     digitalWrite(params->pins_2[1], HIGH);
     digitalWrite(params->pins_1[2], LOW);
     digitalWrite(params->pins_2[2], LOW);
-
 }
 
 void backward( int speed )
@@ -120,14 +120,14 @@ void motor_init ()
     pinMode(params->pins_1[0], PWM_OUTPUT);
     pwmSetMode(PWM_MODE_MS);
     pwmSetClock(384);
-    pwmSetRange(1000); // was 1000 in example?
+    pwmSetRange(100); // was 1000 in example?
     pinMode(params->pins_1[1], OUTPUT);
     pinMode(params->pins_1[2], OUTPUT);
     
     pinMode(params->pins_2[0], PWM_OUTPUT);
     pwmSetMode(PWM_MODE_MS);
     pwmSetClock(384);
-    pwmSetRange(1000); // was 1000 in example?
+    pwmSetRange(100); // was 1000 in example?
     pinMode(params->pins_1[1], OUTPUT);
     pinMode(params->pins_1[2], OUTPUT);
     
