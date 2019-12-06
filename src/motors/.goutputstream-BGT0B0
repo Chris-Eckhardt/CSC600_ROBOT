@@ -76,58 +76,61 @@ void motor_run() {
 
 void forward( int speed )
 {
-    pwmWrite(params->pins_1[0], speed);
-    pwmWrite(params->pins_2[0], speed);
+    softPwmWrite(params->pins_1[2], speed);
+    softPwmWrite(params->pins_2[2], speed);
     digitalWrite(params->pins_1[1], HIGH);
     digitalWrite(params->pins_2[1], HIGH);
-    digitalWrite(params->pins_1[2], LOW);
-    digitalWrite(params->pins_2[2], LOW);
+    digitalWrite(params->pins_1[0], LOW);
+    digitalWrite(params->pins_2[0], LOW);
+
 }
 
 void backward( int speed )
 {
-    pwmWrite(params->pins_1[0], speed);
-    pwmWrite(params->pins_2[0], speed);
+    softPwmWrite(params->pins_1[2], speed);
+    softPwmWrite(params->pins_2[2], speed);
     digitalWrite(params->pins_1[1], LOW);
     digitalWrite(params->pins_2[1], LOW);
-    digitalWrite(params->pins_1[2], HIGH);
-    digitalWrite(params->pins_2[2], HIGH);
+    digitalWrite(params->pins_1[0], HIGH);
+    digitalWrite(params->pins_2[0], HIGH);
 }
 
 void hardLeft( int speed )
 {
-    pwmWrite(params->pins_1[0], speed);
-    pwmWrite(params->pins_2[0], speed);
+    softPwmWrite(params->pins_1[2], speed);
+    softPwmWrite(params->pins_2[2], speed);
     digitalWrite(params->pins_1[1], LOW);
     digitalWrite(params->pins_2[1], HIGH);
-    digitalWrite(params->pins_1[2], HIGH);
-    digitalWrite(params->pins_2[2], LOW);
+    digitalWrite(params->pins_1[0], HIGH);
+    digitalWrite(params->pins_2[0], LOW);
 }
 
 void hardRight( int speed )
 {
-    pwmWrite(params->pins_1[0], speed);
-    pwmWrite(params->pins_2[0], speed);
+    softPwmWrite(params->pins_1[2], speed);
+    softPwmWrite(params->pins_2[2], speed);
     digitalWrite(params->pins_1[1], HIGH);
     digitalWrite(params->pins_2[1], LOW);
-    digitalWrite(params->pins_1[2], LOW);
-    digitalWrite(params->pins_2[2], HIGH);
+    digitalWrite(params->pins_1[0], LOW);
+    digitalWrite(params->pins_2[0], HIGH);
 }
 
 
 void motor_init ()
 {
+    // hardware test //////////////////////////
     pinMode(params->pins_1[0], PWM_OUTPUT);
     pwmSetMode(PWM_MODE_MS);
     pwmSetClock(384);
-    pwmSetRange(100); // was 1000 in example?
+    pwmSetRange(1000); // was 1000 in example?
+    ///////////////////////////////////////////
     pinMode(params->pins_1[1], OUTPUT);
     pinMode(params->pins_1[2], OUTPUT);
     
     pinMode(params->pins_2[0], PWM_OUTPUT);
     pwmSetMode(PWM_MODE_MS);
     pwmSetClock(384);
-    pwmSetRange(100); // was 1000 in example?
+    pwmSetRange(1000); // was 1000 in example?
     pinMode(params->pins_1[1], OUTPUT);
     pinMode(params->pins_1[2], OUTPUT);
     

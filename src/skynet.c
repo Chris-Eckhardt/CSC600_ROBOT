@@ -35,21 +35,25 @@
  
 #define PIN_IR_1 23
 #define PIN_IR_2 24
-#define PIN_IR_3 6
+#define PIN_IR_3 96
 #define PIN_LINE_1 7
 #define PIN_LINE_2 8
 #define PIN_LINE_3 7
 #define PIN_LINE_4 8
 #define PIN_SONAR_TRIGGER 9
 #define PIN_SONAR_ECHO 10
-#define MOTOR_1_A 13
-#define MOTOR_1_B 15
-#define MOTOR_1_C 11
-#define MOTOR_2_A 18
-#define MOTOR_2_B 16
-#define MOTOR_2_C 22
 #define PIN_ON_OFF 11
 #define NUM_OF_THREADS 9
+
+////// MOTOR PINS /////////
+#define MOTOR_1_A 3
+#define MOTOR_1_B 2 
+#define MOTOR_1_C 0 // PWM
+
+#define MOTOR_2_A 13
+#define MOTOR_2_B 14
+#define MOTOR_2_C 12 // PWM
+
 
 /*********************************
  * DATA: Sensor Input Variables
@@ -126,9 +130,7 @@ void run()
 {
     while(1) 
     {
-
-        //printf("running...\n");
-        delay(30);
+        
     }
 }
 
@@ -153,14 +155,15 @@ void init()
     set_thread_args();
 
     pthread_create( &motor_pid, NULL, (void *) motor_thread, (void *) &args[0]);
-    pthread_create( &sonar_pid, NULL, (void *) sonar_thread, (void *) &args[1]);
-    pthread_create( &ir_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[2]);
-    pthread_create( &ir_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[3]);
-    pthread_create( &ir_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[4]);
-    pthread_create( &line_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[5]);
-    pthread_create( &line_2_pid, NULL, (void *) light_emitting_thread, (void *) &args[6]);
-    pthread_create( &line_3_pid, NULL, (void *) light_emitting_thread, (void *) &args[7]);
-    pthread_create( &line_4_pid, NULL, (void *) light_emitting_thread, (void *) &args[8]);
+    // COMMENT THESE OUT UNTIL PROPER GPIO PIN ASSIGNMENT 
+    //pthread_create( &sonar_pid, NULL, (void *) sonar_thread, (void *) &args[1]);
+    //pthread_create( &ir_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[2]);
+    //pthread_create( &ir_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[3]);
+    //pthread_create( &ir_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[4]);
+    //pthread_create( &line_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[5]);
+    //pthread_create( &line_2_pid, NULL, (void *) light_emitting_thread, (void *) &args[6]);
+    //pthread_create( &line_3_pid, NULL, (void *) light_emitting_thread, (void *) &args[7]);
+    //pthread_create( &line_4_pid, NULL, (void *) light_emitting_thread, (void *) &args[8]);
 }
 
 /*********************************
@@ -231,6 +234,7 @@ void set_thread_args()
     args[i].pins_2 = NULL;
     args[i].ptr = &LINE_4;
     args[i].sonar_ptr = NULL;
+    
 }
 
 /*********************************
@@ -238,6 +242,40 @@ void set_thread_args()
  ********************************/
  
 void exit_handler() {
+
+    softPwmWrite(MOTOR_1_C, 0);
+    softPwmWrite(MOTOR_2_C, 0);
+    digitalWrite(MOTOR_1_A, LOW);
+    digitalWrite(MOTOR_1_B, LOW);
+    digitalWrite(MOTOR_2_A, LOW);
+    digitalWrite(MOTOR_2_B, LOW);
+    digitalWrite(PIN_IR_1, LOW);
+    digitalWrite(PIN_IR_2, LOW);
+    digitalWrite(PIN_IR_3, LOW);
+    digitalWrite(PIN_LINE_1, LOW);
+    digitalWrite(PIN_LINE_2, LOW);
+    digitalWrite(PIN_LINE_3, LOW);
+    digitalWrite(PIN_LINE_4 LOW);
+    digitalWrite(PIN_SONAR_TRIGGER, LOW);
+
+
+    pinMode(PIN_IR_1, INPUT);
+    pinMode(PIN_IR_2, INPUT);
+    pinMode(PIN_IR_3, INPUT);
+    pinMode(PIN_LINE_1, INPUT);
+    pinMode(PIN_LINE_2, INPUT);
+    pinMode(PIN_LINE_3, INPUT);
+    pinMode(PIN_LINE_4, INPUT);
+    pinMode(MOTOR_1_A, INPUT);
+    pinMode(MOTOR_1_B, INPUT);
+    pinMode(MOTOR_1_C, INPUT);
+    pinMode(MOTOR_2_A, INPUT);
+    pinMode(MOTOR_2_B, INPUT);
+    pinMode(MOTOR_2_C, INPUT);
+    pinMode(PIN_SONAR_ECHO, INPUT);
+    pinMode(PIN_SONAR_TRIGGER, INPUT);
+
+
     printf("\n*****    exiting...     *****\n");
     for(int i = 0; i < NUM_OF_THREADS; i++) {
         pthread_cancel(*args[i].pid);
