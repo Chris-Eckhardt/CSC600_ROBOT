@@ -4,14 +4,14 @@
 #include <softPwm.h>
 #include "../util/arguments.h"
 
-
 struct Thread_Argument * params;
+int previous_state = 0;
 
 void motor_init();
 void motor_run();
 void test();
-void setState( int state );
-void updateState();
+void handleState( int state );
+void updateMotors();
 void forward( int speed );
 void backward( int speed );
 void hardLeft( int speed );
@@ -32,19 +32,42 @@ void motor_run() {
 
     while(1)
     {
-        setState(params->STATE);
-        updateState();
+        handleState(params->STATE);
+        updateMotors();
     }
 }
 
-void setState( int state )
+// handles any adjustments to motor params that need to be made (if any)
+void handleState( int state )
 {
+    if ( state != previous_state ) state_counter = 0;
+    
     
 }
 
-void updateState()
+// issues actual commands to motor
+void updateMotors()
 {
+    switch(params->STATE)
+    {
+       case FULL_STOP:
+            stopState();
+        
+    }
 }
+
+// ADVANCED MOTOR COMMANDS
+
+void stopState()
+{
+    
+    
+    
+    state_counter++;
+}
+
+
+// BASIC MOTOR COMMANDS
 
 void forward( int speed )
 {
@@ -79,7 +102,6 @@ void motor_init ()
     pinMode(params->pins_2[1], OUTPUT);
     pinMode(params->pins_2[0], OUTPUT);
     
-
     softPwmCreate(params->pins_1[2], 0, 100);
     softPwmCreate(params->pins_2[2], 0, 100);
 }

@@ -6,7 +6,7 @@
 void * motor_thread( void * args );
 void motor_init();
 void test();
-void setState( int state );
+void handleState( int state );
 void updateState();
 
 void motor_run();
