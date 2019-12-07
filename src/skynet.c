@@ -101,6 +101,8 @@ pthread_t line_4_pid;
 
 struct Thread_Argument * args;
 
+int STATE = 0;
+
 /*********************************
  * ADMIN: Function Prototypes
  ********************************/
@@ -130,6 +132,8 @@ void run()
 {
     while(1) 
     {
+        
+        
         
     }
 }
@@ -178,6 +182,7 @@ void set_thread_args()
     args[i].pins_1 = motor_1_pins;
     args[i].pins_2 = motor_2_pins;
     args[i].ptr = NULL;
+    args[i].STATE = &STATE;
     i++;
     args[i].pid = &sonar_pid;
     args[i].thread_id = i+1;
@@ -243,6 +248,13 @@ void set_thread_args()
  
 void exit_handler() {
 
+
+    printf("\n*****    exiting...     *****\n");
+    for(int i = 0; i < NUM_OF_THREADS; i++) {
+        pthread_cancel(*args[i].pid);
+        printf("thread %d of %d cancelled\n", args[i].thread_id, NUM_OF_THREADS);
+    }
+    
     softPwmWrite(MOTOR_1_C, 0);
     softPwmWrite(MOTOR_2_C, 0);
     digitalWrite(MOTOR_1_A, LOW);
@@ -274,13 +286,7 @@ void exit_handler() {
     pinMode(MOTOR_2_C, INPUT);
     pinMode(PIN_SONAR_ECHO, INPUT);
     pinMode(PIN_SONAR_TRIGGER, INPUT);
-
-
-    printf("\n*****    exiting...     *****\n");
-    for(int i = 0; i < NUM_OF_THREADS; i++) {
-        pthread_cancel(*args[i].pid);
-        printf("thread %d of %d cancelled\n", args[i].thread_id, NUM_OF_THREADS);
-    }
+    
     free(args);
     args = NULL;
     printf("***** shutdown complete *****\n");
