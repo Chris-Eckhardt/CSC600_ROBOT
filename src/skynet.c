@@ -40,8 +40,10 @@
 #define PIN_LINE_2 8
 #define PIN_LINE_3 7
 #define PIN_LINE_4 8
-#define PIN_SONAR_TRIGGER 9
-#define PIN_SONAR_ECHO 10
+
+#define PIN_SONAR_TRIGGER 4
+#define PIN_SONAR_ECHO 5
+
 #define PIN_ON_OFF 11
 #define NUM_OF_THREADS 9
 
@@ -83,7 +85,7 @@ int line_1_pin[] = {PIN_LINE_1};
 int line_2_pin[] = {PIN_LINE_2};
 int line_3_pin[] = {PIN_LINE_3};
 int line_4_pin[] = {PIN_LINE_4};
-int pin_on_off = (PIN_ON_OFF);
+int pin_on_off[] = {PIN_ON_OFF};
 
 /*********************************
  * ADMIN: Uninitialized Variables
@@ -132,8 +134,8 @@ void run()
 {
     while(1) 
     {
-        
-        
+        if ( SONAR <= 10. ) STATE = 0;
+        else STATE = 1;
         
     }
 }
@@ -160,7 +162,7 @@ void init()
 
     pthread_create( &motor_pid, NULL, (void *) motor_thread, (void *) &args[0]);
     // COMMENT THESE OUT UNTIL PROPER GPIO PIN ASSIGNMENT 
-    //pthread_create( &sonar_pid, NULL, (void *) sonar_thread, (void *) &args[1]);
+    pthread_create( &sonar_pid, NULL, (void *) sonar_thread, (void *) &args[1]);
     //pthread_create( &ir_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[2]);
     //pthread_create( &ir_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[3]);
     //pthread_create( &ir_1_pid, NULL, (void *) light_emitting_thread, (void *) &args[4]);
@@ -267,7 +269,7 @@ void exit_handler() {
     digitalWrite(PIN_LINE_1, LOW);
     digitalWrite(PIN_LINE_2, LOW);
     digitalWrite(PIN_LINE_3, LOW);
-    digitalWrite(PIN_LINE_4 LOW);
+    digitalWrite(PIN_LINE_4, LOW);
     digitalWrite(PIN_SONAR_TRIGGER, LOW);
 
 

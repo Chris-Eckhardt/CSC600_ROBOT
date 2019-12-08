@@ -8,8 +8,6 @@ struct Thread_Argument * sonar_args;
 int timeOut;
 double temp;
 
-float getDistance();
-
 void * light_emitting_thread ( void * args )
 {
     int temp;
@@ -28,38 +26,39 @@ void * light_emitting_thread ( void * args )
     return(0);
 }
 
-void * sonar_thread ( void * args )
-{
-    float temp;
-    sonar_args = (struct Thread_Argument *) args;
-    
-    pinMode(sonar_args->pins_1[0], OUTPUT);
-    pinMode(sonar_args->pins_1[1], INPUT);
-
-    while(1)
-    {
-        temp = getDistance();
-        *sonar_args->sonar_ptr = temp;
-    
-    }
-    return 0;
-}
-
 float getDistance() {
 	struct timeval tv1;
 	struct timeval tv2;
 	long time1, time2;
-    double distance;
-	digitalWrite(sonar_args->pins_1[0], LOW);
-	delay(2);
+	float distance;
 	digitalWrite(sonar_args->pins_1[0], HIGH);
-	delay(10);
+	delay(20);
+	digitalWrite(sonar_args->pins_1[0], LOW);
 	while(!(digitalRead(sonar_args->pins_1[1]) == 1));
 	gettimeofday(&tv1, NULL);
 	while(!(digitalRead(sonar_args->pins_1[1]) == 0));
 	gettimeofday(&tv2, NULL);
 	time1 = tv1.tv_sec * 1000000 + tv1.tv_usec;
 	time2 = tv2.tv_sec * 1000000 + tv2.tv_usec;
-	distance = (double)(time2 - time1) / 1000000 * 34000 / 2;
+	distance = (float)(time2 - time1) / 1000000 * 34000 / 2;
 	return distance;
 }
+
+void * sonar_thread ( void * args )
+{
+    float temp;
+    sonar_args = (struct Thread_Argument *) args;
+
+    pinMode(sonar_args->pins_1[0], OUTPUT);
+    pinMode(sonar_args->pins_1[1], INPUT);
+    digitalWrite(sonar_args->pins_1[0], LOW);
+
+    while(1)
+    {
+        temp = getDistance();
+        *sonar_args->sonar_ptr = temp;
+	delay(30);
+    }
+    return 0;
+}
+

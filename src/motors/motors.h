@@ -8,7 +8,8 @@ void motor_init();
 void test();
 void handleState( int state );
 void updateState();
-
+void followLine();
+void stopState();
 void motor_run();
 void forward( int speed );
 void backward( int speed );

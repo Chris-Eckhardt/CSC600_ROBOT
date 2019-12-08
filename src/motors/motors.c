@@ -6,12 +6,15 @@
 
 struct Thread_Argument * params;
 int previous_state = 0;
+int state_counter = 0;
 
 void motor_init();
 void motor_run();
 void test();
 void handleState( int state );
 void updateMotors();
+void followLine();
+void stopState();
 void forward( int speed );
 void backward( int speed );
 void hardLeft( int speed );
@@ -32,8 +35,9 @@ void motor_run() {
 
     while(1)
     {
-        handleState(params->STATE);
-        updateMotors();
+        handleState(*params->STATE);
+        //pdateMotors();
+        printf("STATE: %d\n", *params->STATE);
     }
 }
 
@@ -42,17 +46,17 @@ void handleState( int state )
 {
     if ( state != previous_state ) state_counter = 0;
     
-    
 }
 
 // issues actual commands to motor
 void updateMotors()
 {
-    switch(params->STATE)
+    switch(*params->STATE)
     {
-       case FULL_STOP:
+        case 0:
             stopState();
-        
+        case 1:
+            followLine();
     }
 }
 
@@ -60,8 +64,14 @@ void updateMotors()
 
 void stopState()
 {
+    printf("STATE: stopped due to obstruction\n"); /////// TEST
     
-    
+    state_counter++;
+}
+
+void followLine()
+{
+    printf("STATE: following path\n"); //////// TEST
     
     state_counter++;
 }
@@ -90,7 +100,6 @@ void backward( int speed )
     digitalWrite(params->pins_2[1], LOW);
     digitalWrite(params->pins_2[0], HIGH);
 }
-
 
 void motor_init ()
 {
