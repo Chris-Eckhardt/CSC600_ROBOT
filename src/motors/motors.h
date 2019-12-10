@@ -3,17 +3,8 @@
 
 #include "motors.c"
 
-void * motor_thread( void * args );
 void motor_init();
-void test();
-void handleState( int state );
-void updateState();
-void followLine();
-void stopState();
-void motor_run();
-void forward( int speed );
-void backward( int speed );
-void hardLeft( int speed );
-void hardRight( int speed );
+void set_motor_1( int forward, int reverse, int speed );
+void set_motor_1( int forward, int reverse, int speed );
 
 #endif // MOTORS_H
