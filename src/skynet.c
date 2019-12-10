@@ -28,21 +28,9 @@
 #include "./util/arguments.h"
 #include "./util/pins.h"
 #include "./util/test.h"
+#include "./util/data.h"
 #include "./sensors/sensor.h"
 #include "./motors/motors.h"
-
-/*********************************
- * DATA: Sensor Input Variables
- ********************************/
-volatile int IR_1 = 0;
-volatile int IR_2 = 0;
-volatile int IR_3 = 0;
-volatile int LINE_1 = 0;
-volatile int LINE_2 = 0;
-volatile int LINE_3 = 0;
-volatile int LINE_4 = 0;
-volatile float SONAR = 0;
-volatile int ON_OFF_BUTTON = 0;
 
 /*********************************
  * PINS: PIN ARRAYS
@@ -115,8 +103,29 @@ void run()
         {
             backtrack();
             continue;
+        } 
+        /* Clear right */
+        else if(SONAR < 15 && IR_1 == 1 && IR_2 == 0)
+        {
+            pivot_right();
+            continue;
         }
-        
+        /* Clear left */
+        else if(SONAR < 15 && IR_1 == 1 && IR_2 == 0)
+        {
+            pivot_left();
+            continue;
+        } 
+        /* Clear right and left */
+        else if(SONAR < 15 && IR_1 == 0 && IR_2 == 0)
+        {
+            pivot_left(); // default left
+            continue;
+        } 
+        else
+        {
+            pathfind();
+        }
         
         
     }
@@ -128,6 +137,13 @@ void run()
 
 void init()
 {
+    
+
+    IR_1 = IR_2 = IR_3 = 0;
+    LINE_1 =LINE_2 = LINE_3 = LINE_4 = 0;
+    SONAR = 0;
+    ON_OFF_BUTTON = 0;
+
     
     if(wiringPiSetup() == -1) {
         printf("setup wiringPi failed!");
