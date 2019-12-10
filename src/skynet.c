@@ -29,6 +29,7 @@
 #include "./util/pins.h"
 #include "./util/test.h"
 #include "./util/data.h"
+#include "./logic/logic.h"
 #include "./sensors/sensor.h"
 #include "./motors/motors.h"
 
