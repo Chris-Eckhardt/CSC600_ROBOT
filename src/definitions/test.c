@@ -1,4 +1,4 @@
-#include "../motors/motors.h"
+#include "../../src/headers/motors.h"
 
 void mobility_test() {
 	
@@ -7,8 +7,8 @@ void mobility_test() {
 	printf("forward (0-100)\n");
 	for(int i = 0; i < MAX_SPEED; i++)
 	{
-		set_motor_1(1, 0, i);
-		set_motor_2(1, 0, i);
+		set_motor_1(HIGH, LOW, i);
+		set_motor_2(HIGH, LOW, i);
 		delay(10);
 	}
 	
