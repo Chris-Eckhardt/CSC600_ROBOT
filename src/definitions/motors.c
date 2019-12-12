@@ -15,6 +15,7 @@ void set_motor_2( int forward, int backward, int speed);
 void set_motor_1( int forward, int backward, int speed)
 {
     //printf("MOTOR_1: %d %d %d\n", forward, backward, speed);
+    if(speed > MAX_SPEED) speed = MAX_SPEED;
     softPwmWrite(MOTOR_1_PWM, speed);
     digitalWrite(MOTOR_1_F, forward);
     digitalWrite(MOTOR_1_R, backward);
@@ -23,6 +24,7 @@ void set_motor_1( int forward, int backward, int speed)
 void set_motor_2( int forward, int backward, int speed)
 {
     //printf("MOTOR_2: %d %d %d\n", forward, backward, speed);
+    if(speed > MAX_SPEED) speed = MAX_SPEED;
     softPwmWrite(MOTOR_2_PWM, speed);
     digitalWrite(MOTOR_2_F, forward);
     digitalWrite(MOTOR_2_R, backward);

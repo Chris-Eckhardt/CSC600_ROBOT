@@ -74,13 +74,29 @@ int main()
 void run()
 {
 
-    //mobility_test();
+    mobility_test();
+
+    delay(1000);
 
     for(;;)
     {
         get_sensor_data();
         printf("        | LINE_1: %d | LINE_2: %d | SONAR: %f |\n", LINE_1, LINE_2, SONAR); // TEST
-        /*
+
+
+        /////////// if sonar or ir { deal with it }
+        // 1. speed check
+        if(SONAR < 50) limiter = 30;
+        else if(SONAR < 100) limiter = 60; 
+        else limiter = 100;
+
+        if(SONAR < 15 || IR_1 = 1 || IR_2 = 1)
+        {
+            printf("obstruction");
+            set_motor_1(0,0,0);
+            set_motor_2(0,0,0);
+        }
+        
         if(LINE_1 == 1 && LINE_2 == 0)
         {
             printf("LINE_1\n");
@@ -94,12 +110,11 @@ void run()
         else
         {
             printf("GOING STRAIGHT\n");
-            set_motor_1(1,0,50);
-            set_motor_2(1,0,50);
-        }*/
+            //set_motor_1(1,0,50);
+            //set_motor_2(1,0,50);
+        }
         
         delay(30);
-        
         
     }
 }
