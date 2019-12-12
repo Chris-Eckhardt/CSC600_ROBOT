@@ -54,13 +54,14 @@ int main()
 {
     signal(SIGINT, exit_handler);
 
-    if(wiringPiSetup() == -1) {
+    if(wiringPiSetup() == -1)
+    {
         printf("setup wiringPi failed!");
         exit(1);
     }
     
     sensor_init();
-    motor_init();
+    motor_init(&limiter);
     
     run();
     
@@ -83,7 +84,6 @@ void run()
         get_sensor_data();
         printf("        | LINE_1: %d | LINE_2: %d | SONAR: %f |\n", LINE_1, LINE_2, SONAR); // TEST
 
-
         /////////// if sonar or ir { deal with it }
         // 1. speed check
         if(SONAR < 50) limiter = 30;
@@ -92,26 +92,41 @@ void run()
 
         if(SONAR < 15 || IR_1 = 1 || IR_2 = 1)
         {
-            printf("obstruction");
+            state = 0; 
+            if(state == prev_state) counter++;
+            else counter = 0;
             set_motor_1(0,0,0);
             set_motor_2(0,0,0);
+            prev_state = state;
         }
         
         if(LINE_1 == 1 && LINE_2 == 0)
         {
+            state = 1;
+            if(state == prev_state) counter++;
+            else counter = 0;
             printf("LINE_1\n");
             //set_motor_1(0,0,0);
+            prev_state = state;
         }
         else if(LINE_2 == 1 && LINE_1 == 0)
         {
+            state = 2;
+            if(state == prev_state) counter++;
+            else counter = 0;
             printf("LINE_2\n");
             //set_motor_2(0,0,0);
+            prev_state = state;
         }
         else
         {
+            state = 3;
+            if(state == prev_state) counter++;
+            else counter = 0;
             printf("GOING STRAIGHT\n");
             //set_motor_1(1,0,50);
             //set_motor_2(1,0,50);
+            prev_state = state;
         }
         
         delay(30);
