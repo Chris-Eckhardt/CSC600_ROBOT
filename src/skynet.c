@@ -75,7 +75,7 @@ int main()
     
     /* init sensors */
     sensor_init();
-    motor_init();
+    motor_init(&limiter);
     
     /* wait for start button */
     while(1) {
