@@ -4,13 +4,12 @@
 /*********************************
  * DATA: Sensor Input Variables
  ********************************/
-volatile int IR_1;
-volatile int IR_2;
-volatile int IR_3;
-volatile int LINE_1;
-volatile int LINE_2;
-volatile int LINE_3;
-volatile int LINE_4;
+volatile int IR_RIGHT;
+volatile int IR_LEFT;
+volatile int LINE_RIGHT;
+volatile int LINE_LEFT;
+volatile int LINE_CENTER;
+volatile int TILT;
 volatile float SONAR;
 volatile int ON_OFF_BUTTON ;
 

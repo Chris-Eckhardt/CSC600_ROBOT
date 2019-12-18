@@ -32,12 +32,24 @@
 #include "./headers/sensor.h"
 #include "./headers/motors.h"
 
+#define RUN 0
+#define STOP 1
+#define GO_AROUND 2
+#define NORM_SPEED 30
+#define TURN_SPEED_SLOW 20
+#define TURN_SPEED_HIGH 30
+#define TURBO 50
+#define ZERO 0
+
 /*********************************
  * ADMIN: Variables
  ********************************/
 int motor_speed_right = 0;
 int motor_speed_left = 0;
-int limiter = 100;
+pthread_t pid;
+int STATE;
+int prev_state = 0;
+
 
 /*********************************
  * ADMIN: Function Prototypes
@@ -52,18 +64,29 @@ void run();
  
 int main()
 {
+    /* setup exit handler */
     signal(SIGINT, exit_handler);
-
+    
+    /* init wiring pi */
     if(wiringPiSetup() == -1) {
         printf("setup wiringPi failed!");
         exit(1);
     }
     
+    /* init sensors */
     sensor_init();
     motor_init();
     
-    run();
+    /* wait for start button */
+    while(1) {
+        printf("IR LEFT:\n", IR_LEFT);
+        if(!digitalRead(PIN_IR_LEFT)) {
+            run();
+        }
+        delay(50);
+    }
     
+    /* exit program */
     return 0;
 }
 
@@ -73,34 +96,32 @@ int main()
 
 void run()
 {
+    
+    STATE = RUN;
+    // mobility_test(); // TEST
 
-    //mobility_test();
-
-    for(;;)
+    while(1)
     {
         get_sensor_data();
-        printf("        | LINE_1: %d | LINE_2: %d | SONAR: %f |\n", LINE_1, LINE_2, SONAR); // TEST
-        /*
-        if(LINE_1 == 1 && LINE_2 == 0)
+        printf("STATE: %d | TILT: %d | COUNTER: %d | HAS_SEEN: %d | LINE_R: %d | LINE_L: %d | SONAR: %f | IR_R: %d | IR_L: %d |\n",STATE, TILT, counter, has_seen_line, LINE_RIGHT, LINE_LEFT, SONAR, IR_RIGHT, IR_LEFT); // TEST
+                
+        if ( STATE == RUN ) 
         {
-            printf("LINE_1\n");
-            //set_motor_1(0,0,0);
+            if (run_state(ZERO, TURN_SPEED_HIGH, TURN_SPEED_SLOW, NORM_SPEED, &STATE, &prev_state) < 0) continue;
         }
-        else if(LINE_2 == 1 && LINE_1 == 0)
+        
+        if ( STATE == STOP )
         {
-            printf("LINE_2\n");
-            //set_motor_2(0,0,0);
+            if (stop_state(ZERO, TURN_SPEED_HIGH, TURN_SPEED_SLOW, NORM_SPEED, &STATE, &prev_state) < 0) continue;
         }
-        else
+        
+        if ( STATE == GO_AROUND )
         {
-            printf("GOING STRAIGHT\n");
-            set_motor_1(1,0,50);
-            set_motor_2(1,0,50);
-        }*/
-        
-        delay(30);
-        
-        
+            if (go_around_state(ZERO, TURN_SPEED_HIGH, TURN_SPEED_SLOW, NORM_SPEED, &STATE, &prev_state) < 0) continue;
+       }
+      
+      prev_state = STATE;
+    
     }
 }
 
@@ -119,17 +140,17 @@ void exit_handler() {
     digitalWrite(MOTOR_1_R, LOW);
     digitalWrite(MOTOR_2_F, LOW);
     digitalWrite(MOTOR_2_R, LOW);
-    digitalWrite(PIN_IR_1, LOW);
-    digitalWrite(PIN_IR_2, LOW);
-    digitalWrite(PIN_LINE_1, LOW);
-    digitalWrite(PIN_LINE_2, LOW);
+    digitalWrite(PIN_IR_RIGHT, LOW);
+    digitalWrite(PIN_IR_LEFT, LOW);
+    digitalWrite(PIN_LINE_RIGHT, LOW);
+    digitalWrite(PIN_LINE_LEFT, LOW);
     digitalWrite(PIN_SONAR_TRIGGER, LOW);
 
     printf("***** Resetting pin modes   *****\n");
-    pinMode(PIN_IR_1, INPUT);
-    pinMode(PIN_IR_2, INPUT);
-    pinMode(PIN_LINE_1, INPUT);
-    pinMode(PIN_LINE_2, INPUT);
+    pinMode(PIN_IR_RIGHT, INPUT);
+    pinMode(PIN_IR_LEFT, INPUT);
+    pinMode(PIN_LINE_RIGHT, INPUT);
+    pinMode(PIN_LINE_LEFT, INPUT);
     pinMode(MOTOR_1_F, INPUT);
     pinMode(MOTOR_1_R, INPUT);
     pinMode(MOTOR_1_PWM, INPUT);

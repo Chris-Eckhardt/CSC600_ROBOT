@@ -3,9 +3,8 @@
 
 #include "../definitions/logic.c"
 
-void backtrack();
-void pivot_right();
-void pivot_left();
-void pathfind();
+int run_state(int ZERO, int TURN_SPEED_HIGH, int TURN_SPEED_SLOW, int NORM_SPEED, int *STATE, int *prev_state);
+int stop_state(int ZERO, int TURN_SPEED_HIGH, int TURN_SPEED_SLOW, int NORM_SPEED, int *STATE, int *prev_state);
+int go_around_state(int ZERO, int TURN_SPEED_HIGH, int TURN_SPEED_SLOW, int NORM_SPEED, int *STATE, int *prev_state);
 
 #endif /* LOGIC_H */
