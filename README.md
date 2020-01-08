@@ -1,2 +1,2 @@
 # CSC615_ROBOT
-Code for the final project of CSC615
+The I/O and logic implimentation for a line following robot with active sonar range detection.
